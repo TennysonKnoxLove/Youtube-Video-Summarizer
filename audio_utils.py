@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 import io
 from moviepy.editor import VideoFileClip
 
+#Converts .mp4 to .wav audio file
 def mp4_to_wav(mp4_file):
     wav_file = './VideoAudio/audiofile.wav'
     video = VideoFileClip(mp4_file)
@@ -14,7 +15,7 @@ def mp4_to_wav(mp4_file):
     print(f"Conversion complete! Saved MP3 as {wav_file}")
     return wav_file
 
-
+#Splits audio file into chunks in memory.
 def split_audio_in_memory(file_path, chunk_length=900000):
     chunks = []
     with wave.open(file_path, 'rb') as audio_file:
@@ -37,6 +38,7 @@ def split_audio_in_memory(file_path, chunk_length=900000):
             chunks.append(audio_chunk)
     return chunks
 
+#Transcribes each chunk, puts into into a list.
 def transcribe_chunk(r, audio_chunk):
     try:
         with sr.AudioFile(audio_chunk) as source:
@@ -47,6 +49,7 @@ def transcribe_chunk(r, audio_chunk):
         print(f"Error transcribing chunk: {e}")
         return ""
 
+#Converts audio to text via Google Cloud.
 def audioToText(wav_file):
     
     print("Reviewing Content...")
