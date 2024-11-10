@@ -41,7 +41,7 @@ def transcribe_chunk(r, audio_chunk):
     try:
         with sr.AudioFile(audio_chunk) as source:
             audio_data = r.record(source)
-            text = r.recognize_google_cloud(audio_data, credentials_json='subtle-anthem-441105-r3-745bed8702bb.json')
+            text = r.recognize_google_cloud(audio_data, credentials_json='INPUT GOOGLE CLOUD JSON API KEY')
             return text
     except Exception as e:
         print(f"Error transcribing chunk: {e}")
