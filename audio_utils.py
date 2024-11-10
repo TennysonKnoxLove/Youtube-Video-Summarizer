@@ -4,19 +4,17 @@ from concurrent.futures import ThreadPoolExecutor
 import io
 from moviepy.editor import VideoFileClip
 
-#Converts The .MP4 Input Into .Wav File.
 def mp4_to_wav(mp4_file):
-    wav_file = mp4_file.rsplit('.', 1)[0] + '.wav'
+    wav_file = './VideoAudio/audiofile.wav'
     video = VideoFileClip(mp4_file)
     audio = video.audio
     audio.write_audiofile(wav_file)
     audio.close()
     video.close()
     print(f"Conversion complete! Saved MP3 as {wav_file}")
-
     return wav_file
 
-# Splits Audio File Into Shorter "Chunks" And Returns Them In A List
+
 def split_audio_in_memory(file_path, chunk_length=900000):
     chunks = []
     with wave.open(file_path, 'rb') as audio_file:
@@ -39,13 +37,11 @@ def split_audio_in_memory(file_path, chunk_length=900000):
             chunks.append(audio_chunk)
     return chunks
 
-# Sends Each Chunk Off To The Speech To Text API To Be Converted Into String Literal
-
 def transcribe_chunk(r, audio_chunk):
     try:
         with sr.AudioFile(audio_chunk) as source:
             audio_data = r.record(source)
-            text = r.recognize_google_cloud(audio_data, credentials_json='ENTER PATH TO JSON FILE CREDENTIALS GOOGLE CLOUD') # <- Put Your Google Cloud JSON File Here.
+            text = r.recognize_google_cloud(audio_data, credentials_json='subtle-anthem-441105-r3-745bed8702bb.json')
             return text
     except Exception as e:
         print(f"Error transcribing chunk: {e}")
@@ -65,4 +61,5 @@ def audioToText(wav_file):
     for result in results:
         text += result + "\n"
     return text
+
 
